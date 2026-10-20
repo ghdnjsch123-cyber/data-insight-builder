@@ -5,7 +5,7 @@ import json
 import logging
 import os
 import re
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, make_response, render_template, request, send_from_directory
 import numpy as np
 import pandas as pd
 from dotenv import load_dotenv
@@ -58,6 +58,20 @@ TOOL_CATALOG = {
 def index():
     logger.info("[REQUEST] GET /")
     return render_template("index.html")
+
+# ==============================================================================
+# PWA 라우트: 서비스 워커 & 매니페스트 제공
+# ==============================================================================
+@app.route("/sw.js", methods=["GET"])
+def service_worker():
+    response = make_response(send_from_directory("static", "sw.js"))
+    response.headers["Content-Type"] = "application/javascript"
+    response.headers["Service-Worker-Allowed"] = "/"
+    return response
+
+@app.route("/manifest.json", methods=["GET"])
+def manifest():
+    return send_from_directory("static", "manifest.json")
 
 @app.route("/health", methods=["GET"])
 def health():

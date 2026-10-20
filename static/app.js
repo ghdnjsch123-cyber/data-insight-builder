@@ -12,6 +12,8 @@ let lastDiagnosis = null;
 let lastCalculation = null;
 let lastReportMarkdown = "";
 let chatHistoryRecords = [];
+// PWA 설치 프롬프트 보관
+let deferredInstallPrompt = null;
 
 // ==============================================================================
 // 1. 초기화 및 페이지 로드
@@ -23,12 +25,74 @@ document.addEventListener("DOMContentLoaded", () => {
         Chart.defaults.borderColor = "rgba(212, 175, 55, 0.15)";
         Chart.defaults.font.family = "'Noto Serif KR', serif";
     }
+    initPwa();
     checkServerHealth();
     initUploadEvents();
     initAskEvents();
     initActionEvents();
     initChatEvents();
 });
+
+// PWA 서비스 워커 등록 및 설치 프롬프트 제어
+function initPwa() {
+    const btnInstall = document.getElementById("btnPwaInstall");
+    const offlineBanner = document.getElementById("offlineBanner");
+
+    // 1. 서비스 워커 등록
+    if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+            navigator.serviceWorker.register("/sw.js")
+                .then(reg => {
+                    console.log("[PWA] Service Worker 등록 성공 (Scope:", reg.scope, ")");
+                })
+                .catch(err => {
+                    console.error("[PWA] Service Worker 등록 실패:", err);
+                });
+        });
+    }
+
+    // 2. 브라우저 PWA 설치 가능 감지 (beforeinstallprompt)
+    window.addEventListener("beforeinstallprompt", (e) => {
+        // 브라우저 기본 미니 정보바 방지
+        e.preventDefault();
+        deferredInstallPrompt = e;
+        console.log("[PWA] 앱 설치 가능 이벤트 감지 (beforeinstallprompt)");
+
+        if (btnInstall) {
+            btnInstall.style.display = "inline-block";
+            btnInstall.addEventListener("click", async () => {
+                if (!deferredInstallPrompt) return;
+                btnInstall.style.display = "none";
+                deferredInstallPrompt.prompt();
+                const choiceResult = await deferredInstallPrompt.userChoice;
+                console.log("[PWA] 사용자 설치 선택:", choiceResult.outcome);
+                deferredInstallPrompt = null;
+            });
+        }
+    });
+
+    // 3. 앱 설치 완료 감지
+    window.addEventListener("appinstalled", () => {
+        console.log("[PWA] 나자릭 앱이 시스템에 성공적으로 설치되었습니다!");
+        if (btnInstall) btnInstall.style.display = "none";
+        deferredInstallPrompt = null;
+    });
+
+    // 4. 온라인/오프라인 상태 모니터링
+    function updateOnlineStatus() {
+        if (!navigator.onLine) {
+            console.warn("[PWA] 오프라인 상태 감지");
+            if (offlineBanner) offlineBanner.style.display = "block";
+        } else {
+            console.log("[PWA] 온라인 상태 복구");
+            if (offlineBanner) offlineBanner.style.display = "none";
+        }
+    }
+
+    window.addEventListener("online", updateOnlineStatus);
+    window.addEventListener("offline", updateOnlineStatus);
+    updateOnlineStatus();
+}
 
 // 서버 헬스체크 및 API 키 설정 상태 확인
 async function checkServerHealth() {

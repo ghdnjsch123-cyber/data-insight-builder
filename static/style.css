@@ -1258,3 +1258,46 @@ select.form-control optgroup {
     color: #64748b;
     margin-top: 5px;
 }
+
+/* ==========================================================================
+   PWA (Progressive Web App) UI Components
+   ========================================================================== */
+.pwa-install-btn {
+    background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%) !important;
+    color: #07080c !important;
+    font-weight: 800 !important;
+    border: 1px solid var(--gold-bright) !important;
+    box-shadow: 0 0 12px var(--gold-glow), 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+    letter-spacing: 0.5px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+}
+
+.pwa-install-btn:hover {
+    background: linear-gradient(135deg, #fbbf24 0%, #d4af37 100%) !important;
+    box-shadow: 0 0 20px var(--gold-glow-intense), 0 4px 8px rgba(0, 0, 0, 0.6) !important;
+    transform: translateY(-2px);
+}
+
+.offline-banner {
+    margin-top: 14px;
+    padding: 10px 18px;
+    background: linear-gradient(90deg, rgba(153, 27, 27, 0.9) 0%, rgba(120, 20, 20, 0.85) 100%);
+    border: 1px solid var(--crimson-bright);
+    border-radius: var(--radius);
+    color: #fef2f2;
+    font-size: 0.88rem;
+    font-weight: 600;
+    box-shadow: 0 0 15px var(--crimson-glow);
+    text-align: center;
+    animation: offlinePulse 2.5s infinite ease-in-out;
+}
+
+@keyframes offlinePulse {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(239, 68, 68, 0.35);
+    }
+    50% {
+        box-shadow: 0 0 22px rgba(239, 68, 68, 0.75);
+    }
+}

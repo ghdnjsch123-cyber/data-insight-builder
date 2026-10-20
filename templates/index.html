@@ -8,6 +8,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Noto+Serif+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <!-- PWA 웹 앱 매니페스트 및 메타 태그 -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='icons/favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/icon-192x192.png') }}">
+    <meta name="theme-color" content="#d4af37">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Nazarick Insight">
     <!-- 기본 스타일시트 -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <!-- Chart.js CDN (차트 시각화 전용) -->
@@ -26,10 +34,16 @@
                 </div>
             </div>
             <div class="server-status">
+                <button id="btnPwaInstall" class="btn btn-sm btn-primary pwa-install-btn" style="display: none;" title="홈 화면 또는 PC 데스크톱에 나자릭 앱 설치">
+                    📱 앱 설치하기
+                </button>
                 <span id="badgeServer" class="badge badge-loading">결계 확인 중...</span>
                 <span id="badgeApiKey" class="badge badge-loading">마도핵(API Key) 확인...</span>
                 <span id="badgeModel" class="badge badge-info">마도사: -</span>
             </div>
+        </div>
+        <div id="offlineBanner" class="offline-banner" style="display: none;">
+            ⚠️ 현재 오프라인 결계 상태입니다. 네트워크 연결이 끊겨 캐시된 데이터로 동작 중입니다.
         </div>
         <div class="memory-alert">
             ⚔️ <strong>나자릭 성물고 보안 규약:</strong> 모든 공문서(CSV)는 옥좌의 임시 결계(RAM)에만 봉인되며, 결계 해제(서버 재기동) 시 완전 소멸합니다.

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="nazarickGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1e2036" />
+      <stop offset="100%" stop-color="#090a12" />
+    </radialGradient>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="50%" stop-color="#d4af37" />
+      <stop offset="100%" stop-color="#8c6d1f" />
+    </linearGradient>
+    <linearGradient id="rubyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444" />
+      <stop offset="100%" stop-color="#7f1d1d" />
+    </linearGradient>
+  </defs>
+
+  <!-- 배경 흑요석 원형 -->
+  <circle cx="256" cy="256" r="240" fill="url(#nazarickGlow)" stroke="url(#goldGradient)" stroke-width="12" />
+  
+  <!-- 내부 황금 룬 링 -->
+  <circle cx="256" cy="256" r="210" fill="none" stroke="#d4af37" stroke-width="2" stroke-dasharray="8 6" opacity="0.6" />
+  
+  <!-- 중앙 크림슨 룬 다이아몬드 -->
+  <polygon points="256,60 320,256 256,430 192,256" fill="url(#rubyGradient)" stroke="#fbbf24" stroke-width="3" opacity="0.85" />
+  
+  <!-- 나자릭 황금 엠블럼 (Fleur-de-lis Crest) -->
+  <!-- 중앙 첨탑 -->
+  <path d="M256,90 Q286,220 270,360 L242,360 Q226,220 256,90 Z" fill="url(#goldGradient)" stroke="#8c6d1f" stroke-width="3" />
+  
+  <!-- 좌측 날개 -->
+  <path d="M246,260 Q120,210 130,170 Q180,180 240,290 Z" fill="url(#goldGradient)" stroke="#8c6d1f" stroke-width="3" />
+  
+  <!-- 우측 날개 -->
+  <path d="M266,260 Q392,210 382,170 Q332,180 272,290 Z" fill="url(#goldGradient)" stroke="#8c6d1f" stroke-width="3" />
+  
+  <!-- 허리 황금 링 밴드 -->
+  <rect x="210" y="340" width="92" height="24" rx="6" fill="#fef08a" stroke="#d4af37" stroke-width="3" />
+  
+  <!-- 하단 트라이던트 받침대 -->
+  <polygon points="256,440 290,380 222,380" fill="url(#goldGradient)" stroke="#8c6d1f" stroke-width="3" />
+</svg>
