@@ -1,0 +1,23 @@
+# 가상환경 (용량이 크고 각자 PC마다 새로 만듦)
+.venv/
+venv/
+ENV/
+env/
+
+# 민감한 개인 설정 및 API 키 파일 (절대 깃에 올리지 않음)
+.env
+
+# 파이썬 캐시 및 컴파일 파일
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# 에디터 및 OS 임시 파일
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# 로그 파일
+*.log

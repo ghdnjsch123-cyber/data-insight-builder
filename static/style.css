@@ -1,0 +1,1260 @@
+/* ==============================================================================
+   The Great Tomb of Nazarick - Imperial Data Insight Stylesheet
+   오버로드(OVERLORD) 나자릭 지하대분묘 & 마도왕 아인즈 울 고운 테마
+   위엄과 기품이 넘치는 흑요석(Obsidian) & 로열 골드(Royal Gold) & 크림슨(Crimson) 다크 판타지
+   ============================================================================== */
+
+:root {
+    /* 나자릭 옥좌의 색채 */
+    --nazarick-void: #07080c;
+    --nazarick-abyss: #0d0e17;
+    --nazarick-card: #131522;
+    --nazarick-card-hover: #181a2b;
+    --nazarick-card-header: #1a1c2e;
+    
+    /* 황금 룬 (옥좌 & 스태프 오브 아인즈 울 고운) */
+    --gold-primary: #d4af37;
+    --gold-bright: #fbbf24;
+    --gold-dark: #8c6d1f;
+    --gold-glow: rgba(212, 175, 55, 0.35);
+    --gold-glow-intense: rgba(212, 175, 55, 0.65);
+    
+    /* 크림슨 & 버건디 (마도왕의 안광 & 로브) */
+    --crimson-primary: #991b1b;
+    --crimson-bright: #ef4444;
+    --crimson-glow: rgba(239, 68, 68, 0.35);
+    
+    /* 심연의 마력 (보라) */
+    --mana-purple: #6366f1;
+    --mana-dark: #312e81;
+    
+    /* 텍스트 색상 */
+    --text-pure: #ffffff;
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --text-gold: #fde68a;
+    
+    /* 테두리 & 그림자 */
+    --border-gold: rgba(212, 175, 55, 0.35);
+    --border-gold-subtle: rgba(212, 175, 55, 0.18);
+    --border-dark: #23263b;
+    --shadow-nazarick: 0 10px 30px rgba(0, 0, 0, 0.85), 0 0 1px 1px rgba(212, 175, 55, 0.25);
+    --shadow-nazarick-hover: 0 14px 40px rgba(0, 0, 0, 0.95), 0 0 15px rgba(212, 175, 55, 0.45);
+    
+    /* 폰트 */
+    --font-heading: "Cinzel", "Noto Serif KR", Georgia, serif;
+    --font-body: "Noto Serif KR", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Malgun Gothic", sans-serif;
+    --radius: 8px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--nazarick-void);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 80% 20%, rgba(153, 27, 27, 0.10) 0%, transparent 40%),
+        radial-gradient(circle at 20% 70%, rgba(212, 175, 55, 0.06) 0%, transparent 50%),
+        linear-gradient(180deg, #090a10 0%, #06070a 100%);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    line-height: 1.65;
+    padding-bottom: 80px;
+    min-height: 100vh;
+}
+
+/* 커스텀 스크롤바 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #090a10;
+}
+::-webkit-scrollbar-thumb {
+    background: #2a2c42;
+    border-radius: 4px;
+    border: 1px solid var(--border-gold-subtle);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gold-dark);
+}
+
+/* ==========================================================================
+   Header & Throne Branding
+   ========================================================================== */
+.app-header {
+    background: linear-gradient(180deg, #12131e 0%, #0d0e17 100%);
+    border-bottom: 2px solid var(--gold-primary);
+    padding: 24px 28px 16px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.8), 0 0 15px rgba(212, 175, 55, 0.2);
+    position: relative;
+}
+
+.app-header::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold-bright) 50%, transparent 100%);
+}
+
+.header-content {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.brand-crest {
+    font-size: 2.2rem;
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.8));
+    animation: crestPulse 3s ease-in-out infinite;
+}
+
+@keyframes crestPulse {
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.6)); }
+    50% { transform: scale(1.05); filter: drop-shadow(0 0 16px rgba(212, 175, 55, 0.9)); }
+}
+
+.brand-title {
+    font-family: var(--font-heading);
+    font-size: 1.7rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, #ffffff 0%, #fef08a 40%, #d4af37 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+}
+
+.tagline {
+    font-size: 0.86rem;
+    color: var(--text-secondary);
+    margin-top: 3px;
+    letter-spacing: 0.3px;
+}
+
+.server-status {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.badge {
+    display: inline-block;
+    padding: 5px 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    border: 1px solid transparent;
+    text-transform: uppercase;
+}
+
+.badge-loading {
+    background: #1a1c2e;
+    color: var(--text-muted);
+    border-color: #2e324e;
+}
+.badge-success {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.2);
+}
+.badge-warning {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.5);
+}
+.badge-danger {
+    background: rgba(220, 38, 38, 0.2);
+    color: #f87171;
+    border-color: rgba(220, 38, 38, 0.6);
+}
+.badge-info {
+    background: rgba(99, 102, 241, 0.18);
+    color: #a5b4fc;
+    border-color: rgba(99, 102, 241, 0.5);
+}
+
+.memory-alert {
+    max-width: 1140px;
+    margin: 14px auto 0;
+    padding: 9px 16px;
+    background: linear-gradient(90deg, rgba(26, 28, 46, 0.9) 0%, rgba(18, 19, 30, 0.9) 100%);
+    border-left: 4px solid var(--gold-primary);
+    border-top: 1px solid var(--border-gold-subtle);
+    border-bottom: 1px solid var(--border-gold-subtle);
+    border-right: 1px solid var(--border-gold-subtle);
+    font-size: 0.82rem;
+    color: var(--text-gold);
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* ==========================================================================
+   Container & Obsidian Cards
+   ========================================================================== */
+.container {
+    max-width: 1140px;
+    margin: 32px auto 0;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.card {
+    background: var(--nazarick-card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-gold);
+    box-shadow: var(--shadow-nazarick);
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    position: relative;
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.6) 50%, transparent 100%);
+}
+
+.card:hover {
+    border-color: var(--gold-primary);
+    box-shadow: var(--shadow-nazarick-hover);
+}
+
+.card-header {
+    padding: 16px 22px;
+    background: var(--nazarick-card-header);
+    border-bottom: 1px solid var(--border-gold-subtle);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header h2 {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--gold-bright);
+    letter-spacing: 0.8px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.step-num {
+    background: #090a12;
+    color: var(--gold-bright);
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    border: 1px solid var(--gold-dark);
+    letter-spacing: 1px;
+    font-family: var(--font-heading);
+    box-shadow: 0 0 6px rgba(212, 175, 55, 0.2);
+}
+
+.card-body {
+    padding: 24px;
+}
+
+/* ==========================================================================
+   Step 1: Summoning Circle (Drop Zone)
+   ========================================================================== */
+.drop-zone {
+    border: 2px dashed var(--gold-dark);
+    border-radius: var(--radius);
+    padding: 46px 24px;
+    text-align: center;
+    background: radial-gradient(circle at 50% 50%, rgba(30, 32, 54, 0.5) 0%, rgba(13, 14, 23, 0.8) 100%);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6);
+}
+
+.drop-zone:hover, .drop-zone.dragover {
+    border-color: var(--gold-bright);
+    background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.12) 0%, rgba(20, 22, 36, 0.9) 100%);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.3), inset 0 0 25px rgba(212, 175, 55, 0.1);
+    transform: translateY(-2px);
+}
+
+.drop-zone-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5));
+}
+
+.drop-zone-text {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--gold-bright);
+    letter-spacing: 0.5px;
+}
+
+.drop-zone-sub {
+    font-size: 0.84rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+}
+
+.progress-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 26px;
+    color: var(--gold-bright);
+    font-weight: 700;
+}
+
+.spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(212, 175, 55, 0.2);
+    border-top-color: var(--gold-bright);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   Step 2: Diagnosis Summary (석판 타일)
+   ========================================================================== */
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.stat-box {
+    background: #0f101a;
+    border: 1px solid var(--border-dark);
+    padding: 16px 18px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
+    transition: border-color 0.2s;
+}
+
+.stat-box:hover {
+    border-color: var(--gold-dark);
+}
+
+.stat-label {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    font-family: var(--font-heading);
+}
+
+.stat-box strong {
+    font-size: 1.15rem;
+    color: var(--text-pure);
+}
+
+.highlight-box {
+    background: linear-gradient(135deg, rgba(153, 27, 27, 0.25) 0%, rgba(26, 28, 46, 0.4) 100%);
+    border-color: rgba(239, 68, 68, 0.5);
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.15);
+}
+
+.highlight-text {
+    color: #fca5a5 !important;
+    font-size: 1.35rem !important;
+    font-family: var(--font-heading);
+    text-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+}
+
+.warning-container {
+    background: rgba(45, 23, 10, 0.7);
+    border: 1px solid #78350f;
+    border-left: 5px solid var(--gold-bright);
+    padding: 16px 20px;
+    border-radius: 6px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.warning-container h3 {
+    font-family: var(--font-heading);
+    font-size: 0.96rem;
+    color: #fde68a;
+    margin-bottom: 8px;
+    font-weight: 800;
+}
+
+.warning-container ul {
+    padding-left: 22px;
+    font-size: 0.88rem;
+    color: #fed7aa;
+}
+
+.preview-details {
+    margin-top: 16px;
+    border: 1px solid var(--border-dark);
+    border-radius: 6px;
+    padding: 12px 16px;
+    background: #0d0e17;
+}
+
+.preview-details summary {
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--gold-bright);
+    font-family: var(--font-heading);
+}
+
+.table-scroll {
+    overflow-x: auto;
+    margin-top: 14px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.84rem;
+    text-align: left;
+}
+
+th, td {
+    padding: 10px 14px;
+    border: 1px solid #202237;
+    white-space: nowrap;
+}
+
+th {
+    background: #191b2c;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    color: var(--gold-bright);
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--gold-dark);
+}
+
+tr:nth-child(even) {
+    background-color: rgba(22, 24, 38, 0.6);
+}
+
+tr:hover {
+    background-color: rgba(212, 175, 55, 0.08);
+}
+
+/* ==========================================================================
+   Step 3: Natural Language Questions (자연어 질의 & 옥좌의 통치)
+   ========================================================================== */
+.ask-chips-container {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.ask-chip {
+    background: #161828;
+    border: 1px solid var(--border-gold-subtle);
+    color: var(--text-gold);
+    padding: 6px 14px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.ask-chip:hover {
+    background: var(--gold-primary);
+    color: #07080c;
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 12px var(--gold-glow);
+    transform: translateY(-1px);
+}
+
+.ask-input-form {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.ask-input-form input {
+    flex: 1;
+    font-size: 0.95rem;
+    padding: 12px 16px;
+    background: #0c0d16;
+    border: 1px solid var(--border-gold);
+    color: var(--text-pure);
+    border-radius: 6px;
+}
+
+.ask-input-form input:focus {
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 12px var(--gold-glow);
+}
+
+.ask-result-box {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.ask-answer-card {
+    background: #0f111c;
+    border: 1px solid var(--gold-dark);
+    border-radius: 8px;
+    padding: 22px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
+    position: relative;
+}
+
+.ask-answer-card::before {
+    content: "⚜️";
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    font-size: 1.4rem;
+    opacity: 0.3;
+}
+
+.ask-answer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border-dark);
+    padding-bottom: 12px;
+}
+
+.ask-viz-toggle-bar {
+    display: flex;
+    justify-content: center;
+    margin: 6px 0;
+}
+
+.ask-viz-toggle-bar .btn {
+    font-size: 0.94rem;
+    padding: 11px 26px;
+    font-weight: 800;
+    font-family: var(--font-heading);
+    letter-spacing: 0.5px;
+}
+
+.ask-viz-drawer {
+    background: #090a12;
+    border: 1px solid var(--border-gold);
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    animation: fadeIn 0.3s ease;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.7);
+}
+
+.korea-summary-banner {
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.3) 0%, rgba(15, 23, 42, 0.8) 100%);
+    border: 1px solid rgba(96, 165, 250, 0.4);
+    border-left: 5px solid #38bdf8;
+    border-radius: 6px;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
+}
+
+.korea-flag-icon {
+    font-size: 2.2rem;
+    flex-shrink: 0;
+}
+
+.korea-summary-text {
+    font-size: 0.94rem;
+    color: #e0f2fe;
+    font-weight: 600;
+    line-height: 1.55;
+}
+
+/* ==========================================================================
+   Step 4: AI Recommendations & Tools
+   ========================================================================== */
+.ai-suggest-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.hint-text {
+    font-size: 0.86rem;
+    color: var(--text-muted);
+}
+
+.suggestion-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+    gap: 18px;
+    margin-bottom: 26px;
+}
+
+.suggest-card {
+    background: #0f111c;
+    border: 1px solid var(--border-gold-subtle);
+    border-radius: 8px;
+    padding: 18px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.suggest-card:hover {
+    border-color: var(--gold-bright);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8), 0 0 15px var(--gold-glow);
+}
+
+.suggest-card.active {
+    border-color: var(--gold-bright);
+    background: #151829;
+    box-shadow: 0 0 20px var(--gold-glow);
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.suggest-tool-badge {
+    background: rgba(99, 102, 241, 0.25);
+    color: #c7d2fe;
+    border: 1px solid rgba(99, 102, 241, 0.5);
+    padding: 4px 10px;
+    font-size: 0.74rem;
+    font-weight: 800;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+}
+
+.suggest-card h4 {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    color: var(--gold-bright);
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.suggest-why {
+    font-size: 0.86rem;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.suggest-caution {
+    font-size: 0.8rem;
+    color: #fde68a;
+    background: rgba(120, 53, 15, 0.35);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    padding: 8px 10px;
+    border-radius: 4px;
+}
+
+.divider {
+    text-align: center;
+    position: relative;
+    margin: 28px 0;
+}
+
+.divider::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold-dark) 50%, transparent 100%);
+}
+
+.divider span {
+    position: relative;
+    background: var(--nazarick-card);
+    padding: 0 18px;
+    font-size: 0.84rem;
+    color: var(--gold-bright);
+    font-weight: 700;
+    font-family: var(--font-heading);
+    letter-spacing: 1px;
+}
+
+.manual-tool-box {
+    background: #0e0f19;
+    border: 1px solid var(--border-gold-subtle);
+    border-radius: 8px;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 18px;
+    align-items: end;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.form-group label {
+    font-size: 0.84rem;
+    font-weight: 800;
+    color: var(--gold-bright);
+    font-family: var(--font-heading);
+    letter-spacing: 0.5px;
+}
+
+.form-control {
+    padding: 11px 14px;
+    font-size: 0.9rem;
+    border: 1px solid var(--border-gold-subtle);
+    border-radius: 6px;
+    background: #090a12;
+    color: var(--text-pure);
+    outline: none;
+    transition: all 0.2s;
+    font-family: var(--font-body);
+}
+
+.form-control:focus {
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 12px var(--gold-glow);
+}
+
+select.form-control option {
+    background: #121422;
+    color: var(--text-primary);
+}
+
+select.form-control optgroup {
+    background: #0b0c14;
+    color: var(--gold-bright);
+    font-weight: 800;
+    font-family: var(--font-heading);
+}
+
+.form-hint {
+    font-size: 0.74rem;
+    color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Buttons (Imperial Nazarick Styles)
+   ========================================================================== */
+.btn {
+    padding: 11px 20px;
+    font-size: 0.92rem;
+    font-weight: 800;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    font-family: var(--font-heading);
+    letter-spacing: 0.6px;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #d4af37 0%, #a67c1e 100%);
+    color: #07080c;
+    border-color: #fde047;
+    box-shadow: 0 4px 14px rgba(212, 175, 55, 0.35);
+}
+.btn-primary:hover {
+    background: linear-gradient(135deg, #facc15 0%, #b48316 100%);
+    box-shadow: 0 0 20px var(--gold-glow-intense);
+    transform: translateY(-1px);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #059669 0%, #064e3b 100%);
+    color: #ffffff;
+    border-color: #34d399;
+    box-shadow: 0 4px 14px rgba(5, 150, 105, 0.35);
+}
+.btn-success:hover {
+    background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+    box-shadow: 0 0 18px rgba(16, 185, 129, 0.5);
+    transform: translateY(-1px);
+}
+
+.btn-info {
+    background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);
+    color: #ffffff;
+    border-color: #a78bfa;
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
+}
+.btn-info:hover {
+    background: linear-gradient(135deg, #8b5cf6 0%, #5b21b6 100%);
+    box-shadow: 0 0 18px rgba(139, 92, 246, 0.5);
+    transform: translateY(-1px);
+}
+
+.btn-outline-primary {
+    background: transparent;
+    color: var(--gold-bright);
+    border: 1px solid var(--gold-primary);
+}
+.btn-outline-primary:hover {
+    background: rgba(212, 175, 55, 0.15);
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 14px var(--gold-glow);
+}
+
+/* ==========================================================================
+   Step 5: Calculation & Chart (마법진 시각화)
+   ========================================================================== */
+.pandas-badge {
+    background: linear-gradient(90deg, rgba(20, 83, 45, 0.5) 0%, rgba(13, 14, 23, 0.8) 100%);
+    border: 1px solid rgba(34, 197, 94, 0.4);
+    color: #86efac;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 0.86rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.calc-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 12px;
+    background: #0a0b12;
+    padding: 14px 18px;
+    border-radius: 6px;
+    font-size: 0.86rem;
+    margin-bottom: 18px;
+    border: 1px solid var(--border-dark);
+}
+
+.text-danger { color: #f87171 !important; }
+
+.chart-box {
+    margin: 22px 0;
+    padding: 20px;
+    background: #0a0b12;
+    border: 1px solid var(--border-gold-subtle);
+    border-radius: 8px;
+    height: 520px;
+    max-height: 600px;
+    position: relative;
+    box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.8);
+}
+
+.caution-box {
+    background: rgba(120, 53, 15, 0.25);
+    border-left: 4px solid var(--gold-bright);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    padding: 14px 18px;
+    font-size: 0.86rem;
+    color: #fef08a;
+    border-radius: 4px;
+    margin-bottom: 18px;
+}
+
+.calc-details summary {
+    font-size: 0.92rem;
+    font-weight: 800;
+    cursor: pointer;
+    color: var(--gold-bright);
+    margin-bottom: 10px;
+    font-family: var(--font-heading);
+}
+
+/* ==========================================================================
+   Step 6: Explain & Markdown (마도왕의 보고서)
+   ========================================================================== */
+.mode-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.mode-title {
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: var(--gold-bright);
+    font-family: var(--font-heading);
+}
+
+.mode-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: #0e101a;
+    border: 1px solid var(--border-dark);
+    padding: 14px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.mode-option:hover {
+    border-color: var(--gold-dark);
+    background: #141624;
+}
+
+.mode-option input {
+    margin-top: 4px;
+    accent-color: var(--gold-primary);
+}
+
+.mode-option strong {
+    font-size: 0.92rem;
+    color: var(--text-pure);
+    display: block;
+    font-family: var(--font-heading);
+}
+
+.mode-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: block;
+    margin-top: 3px;
+}
+
+.report-box {
+    margin-top: 24px;
+    background: #0d0f19;
+    border: 1px solid var(--border-gold);
+    border-radius: 8px;
+    padding: 26px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+}
+
+.report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-dark);
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.report-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.report-tip {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* Markdown Rendering */
+.markdown-body h2 {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--gold-bright);
+    border-bottom: 1px solid var(--gold-dark);
+    padding-bottom: 8px;
+    margin: 26px 0 12px;
+    letter-spacing: 0.5px;
+}
+
+.markdown-body h2:first-child {
+    margin-top: 0;
+}
+
+.markdown-body h3 {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    color: #e2e8f0;
+    margin: 18px 0 8px;
+}
+
+.markdown-body p {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    margin-bottom: 14px;
+    line-height: 1.7;
+}
+
+.markdown-body ul, .markdown-body ol {
+    padding-left: 24px;
+    margin-bottom: 14px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.markdown-body li {
+    margin-bottom: 5px;
+}
+
+.markdown-body strong {
+    color: var(--text-pure);
+}
+
+.markdown-body blockquote {
+    border-left: 4px solid var(--gold-primary);
+    background: rgba(212, 175, 55, 0.06);
+    padding: 10px 16px;
+    color: var(--text-gold);
+    margin: 14px 0;
+    border-radius: 0 4px 4px 0;
+}
+
+/* ==========================================================================
+   Step 7: Chat & Supreme Counsel
+   ========================================================================== */
+.chat-chips-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.chip-label {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--gold-bright);
+    font-family: var(--font-heading);
+}
+
+.chat-chip {
+    background: #161828;
+    border: 1px solid var(--border-gold-subtle);
+    color: var(--text-gold);
+    padding: 5px 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chat-chip:hover {
+    background: var(--gold-primary);
+    color: #07080c;
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 10px var(--gold-glow);
+}
+
+.chat-messages {
+    background: #090a12;
+    border: 1px solid var(--border-dark);
+    border-radius: 8px;
+    padding: 18px;
+    min-height: 240px;
+    max-height: 460px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 16px;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+.chat-msg {
+    display: flex;
+    gap: 12px;
+    max-width: 86%;
+}
+
+.user-msg {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.ai-msg {
+    align-self: flex-start;
+}
+
+.msg-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    border: 1px solid var(--gold-dark);
+}
+
+.user-msg .msg-avatar {
+    background: #7f1d1d;
+    border-color: #ef4444;
+}
+
+.ai-msg .msg-avatar {
+    background: #1e1b2e;
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 8px var(--gold-glow);
+}
+
+.msg-bubble {
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    word-break: break-word;
+}
+
+.user-msg .msg-bubble {
+    background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
+    color: #ffffff;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    border-bottom-right-radius: 2px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.ai-msg .msg-bubble {
+    background: #141624;
+    border: 1px solid var(--border-gold);
+    color: var(--text-primary);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+    border-bottom-left-radius: 2px;
+}
+
+.ai-msg .msg-bubble p {
+    margin-bottom: 8px;
+}
+.ai-msg .msg-bubble p:last-child {
+    margin-bottom: 0;
+}
+
+.chat-input-form {
+    display: flex;
+    gap: 12px;
+}
+
+.chat-input-form input {
+    flex: 1;
+    background: #090a12;
+    border: 1px solid var(--border-gold-subtle);
+    color: var(--text-pure);
+}
+
+.chat-input-form input:focus {
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 10px var(--gold-glow);
+}
+
+/* ==========================================================================
+   Step 8: Export Banner
+   ========================================================================== */
+.export-banner {
+    background: radial-gradient(circle at 100% 0%, rgba(212, 175, 55, 0.15) 0%, rgba(13, 14, 23, 0.9) 100%);
+    border: 1px solid var(--gold-primary);
+    border-radius: 8px;
+    padding: 26px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 22px;
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.15);
+}
+
+.export-info h3 {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    color: var(--gold-bright);
+    margin-bottom: 8px;
+    font-weight: 800;
+}
+
+.export-info .hint-text {
+    color: var(--text-secondary);
+    max-width: 680px;
+    line-height: 1.55;
+}
+
+.export-actions {
+    flex-shrink: 0;
+}
+
+.btn-lg {
+    padding: 13px 28px;
+    font-size: 1.02rem;
+}
+
+.btn-sm {
+    padding: 7px 14px;
+    font-size: 0.82rem;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.app-footer {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 0.84rem;
+    color: var(--text-muted);
+    font-family: var(--font-heading);
+    letter-spacing: 0.5px;
+}
+
+.sub-footer {
+    font-size: 0.76rem;
+    color: #64748b;
+    margin-top: 5px;
+}

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Great Tomb of Nazarick | AI Data Insight</title>
+    <!-- 구글 웹폰트 (위엄 있는 판타지 세리프 Cinzel + Noto Serif KR) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Noto+Serif+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <!-- 기본 스타일시트 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Chart.js CDN (차트 시각화 전용) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Marked.js CDN (Gemini 마크다운 보고서 렌더링용) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-content">
+            <div class="brand">
+                <div class="brand-crest">⚜️</div>
+                <div>
+                    <h1 class="brand-title">THE THRONE OF NAZARICK</h1>
+                    <p class="tagline">지고의 41인에 필적하는 Python Pandas의 절대적 연산력과 마도왕 Gemini AI의 혜안</p>
+                </div>
+            </div>
+            <div class="server-status">
+                <span id="badgeServer" class="badge badge-loading">결계 확인 중...</span>
+                <span id="badgeApiKey" class="badge badge-loading">마도핵(API Key) 확인...</span>
+                <span id="badgeModel" class="badge badge-info">마도사: -</span>
+            </div>
+        </div>
+        <div class="memory-alert">
+            ⚔️ <strong>나자릭 성물고 보안 규약:</strong> 모든 공문서(CSV)는 옥좌의 임시 결계(RAM)에만 봉인되며, 결계 해제(서버 재기동) 시 완전 소멸합니다.
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- 1단계: CSV 파일 업로드 -->
+        <section class="card" id="sectionUpload">
+            <div class="card-header">
+                <h2>1. CSV 파일 업로드 및 자동 진단</h2>
+                <span class="step-num">Step 1</span>
+            </div>
+            <div class="card-body">
+                <div id="dropZone" class="drop-zone">
+                    <div class="drop-zone-icon">📁</div>
+                    <p class="drop-zone-text">CSV 파일을 이곳으로 드래그하거나 클릭하여 선택하세요</p>
+                    <p class="drop-zone-sub">인코딩(UTF-8, CP949 등) 및 상단 숨은 헤더 자동 감지 (.csv 지원, 최대 10MB)</p>
+                    <input type="file" id="fileInput" accept=".csv" style="display: none;">
+                </div>
+                <div id="uploadProgress" class="progress-container" style="display: none;">
+                    <div class="spinner"></div>
+                    <span id="uploadStatusText">파일을 업로드하고 진단하는 중입니다...</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2단계: 데이터 진단 결과 -->
+        <section class="card" id="sectionDiagnosis" style="display: none;">
+            <div class="card-header">
+                <h2>2. 데이터 종합 진단 보고서</h2>
+                <span class="step-num">Step 2</span>
+            </div>
+            <div class="card-body">
+                <div class="summary-grid">
+                    <div class="stat-box">
+                        <span class="stat-label">파일명</span>
+                        <strong id="diagFilename">-</strong>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">인코딩 / 스킵 줄</span>
+                        <strong id="diagEncoding">-</strong>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">데이터 크기</span>
+                        <strong id="diagShape">-</strong>
+                    </div>
+                    <div class="stat-box highlight-box">
+                        <span class="stat-label">권장 기준연도</span>
+                        <strong id="diagRecYear" class="highlight-text">-</strong>
+                    </div>
+                </div>
+
+                <!-- 경고 목록 -->
+                <div id="warningContainer" class="warning-container" style="display: none;">
+                    <h3>⚠️ 주의 및 진단 경고</h3>
+                    <ul id="warningList"></ul>
+                </div>
+
+                <!-- 10행 미리보기 아코디언 -->
+                <details class="preview-details">
+                    <summary>📋 상위 10행 데이터 미리보기 (클릭하여 펼치기)</summary>
+                    <div class="table-scroll" id="previewTableContainer"></div>
+                </details>
+            </div>
+        </section>
+
+        <!-- 3단계: 자연어로 자유롭게 질문하기 (신규 기능: AI 즉시 분석 & 한국 비교) -->
+        <section class="card" id="sectionAsk" style="display: none;">
+            <div class="card-header">
+                <h2>3. 💬 자연어로 자유롭게 질문하기 (AI 즉시 분석 & 한국 비교)</h2>
+                <span class="step-num">Step 3</span>
+            </div>
+            <div class="card-body">
+                <p class="hint-text" style="margin-bottom: 14px;">
+                    알고 싶은 내용을 자연스러운 한국어로 편하게 질문해 보세요. AI가 질문에 맞는 데이터를 정밀 계산하여 <strong>명쾌한 답변과 함께 한국의 순위 및 수치를 항상 비교</strong>해 드립니다.
+                </p>
+
+                <!-- 추천 질문 칩 -->
+                <div class="ask-chips-container">
+                    <span class="chip-label">추천 질문:</span>
+                    <button class="ask-chip" data-query="인터넷 보급률 상위 10개국은 어디이고 한국은 몇 위야?">🏆 상위 10개국과 한국 순위는?</button>
+                    <button class="ask-chip" data-query="전 세계 평균 보급률과 한국의 차이는 얼마나 돼?">🎯 세계 평균과 한국의 차이는?</button>
+                    <button class="ask-chip" data-query="한국과 주요 선진국들의 연도별 보급률 변화 추이는 어때?">📈 한국과 주요국 연도별 추이는?</button>
+                    <button class="ask-chip" data-query="전 세계 인터넷 보급률 분포에서 한국의 위치는 어디쯤이야?">📊 전체 보급률 분포와 한국 위치는?</button>
+                </div>
+
+                <!-- 질문 입력 폼 -->
+                <form id="askForm" class="ask-input-form">
+                    <input type="text" id="askInput" class="form-control" placeholder="예: 인터넷 보급률이 가장 높은 나라는 어디이고 한국과 얼마나 차이나? (Enter 키로 질문)" autocomplete="off">
+                    <button type="submit" id="btnAskSubmit" class="btn btn-primary">🔍 질문하기</button>
+                </form>
+
+                <!-- 질문 진행 스피너 -->
+                <div id="askProgress" class="progress-container" style="display: none;">
+                    <div class="spinner"></div>
+                    <span id="askStatusText">데이터를 계산하고 한국과 비교 분석하는 중입니다...</span>
+                </div>
+
+                <!-- 질문 결과 및 시각화 영역 -->
+                <div id="askResultContainer" class="ask-result-box" style="display: none;">
+                    <!-- AI 답변 (말) -->
+                    <div class="ask-answer-card">
+                        <div class="ask-answer-header">
+                            <span class="badge badge-success">AI 분석 멘토 답변</span>
+                            <span id="askToolBadge" class="badge badge-info">도구: -</span>
+                        </div>
+                        <div id="askAnswerContent" class="markdown-body"></div>
+                    </div>
+
+                    <!-- 시각화 자료 토글 버튼 -->
+                    <div class="ask-viz-toggle-bar">
+                        <button id="btnToggleAskViz" class="btn btn-outline-primary">
+                            📊 시각화 자료 (그래프 & 상세 표) 보기 ▼
+                        </button>
+                    </div>
+
+                    <!-- 접이식 시각화 자료 영역 -->
+                    <div id="askVizDrawer" class="ask-viz-drawer" style="display: none;">
+                        <!-- 한국 비교 요약 배너 -->
+                        <div id="askKoreaBanner" class="korea-summary-banner" style="display: none;">
+                            <div class="korea-flag-icon">🇰🇷</div>
+                            <div class="korea-summary-text" id="askKoreaSummaryText">-</div>
+                        </div>
+
+                        <!-- 차트 캔버스 -->
+                        <div class="chart-box" id="askChartBox">
+                            <canvas id="askChart"></canvas>
+                        </div>
+
+                        <!-- 상세 수치 표 -->
+                        <details class="calc-details" open>
+                            <summary>📊 세부 계산 수치 표</summary>
+                            <div id="askTableContainer" class="table-scroll"></div>
+                        </details>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4단계: AI 분석 제안 및 도구 선택 -->
+        <section class="card" id="sectionSuggest" style="display: none;">
+            <div class="card-header">
+                <h2>4. 분석 도구 선택 (AI 제안 및 카탈로그)</h2>
+                <span class="step-num">Step 4</span>
+            </div>
+            <div class="card-body">
+                <div class="ai-suggest-bar">
+                    <button id="btnGetSuggestions" class="btn btn-primary">🤖 Gemini에게 맞춤 분석 추천받기</button>
+                    <span class="hint-text">카탈로그 12종 중 이 데이터에 가장 알맞은 3~5가지를 AI가 추천합니다.</span>
+                </div>
+
+                <!-- AI 추천 카드 컨테이너 -->
+                <div id="suggestionCards" class="suggestion-cards-grid" style="display: none;"></div>
+
+                <div class="divider"><span>또는 직접 도구 선택하기</span></div>
+
+                <!-- 수동 도구 실행 컨트롤러 -->
+                <div class="manual-tool-box">
+                    <div class="form-group">
+                        <label for="selectTool">분석 도구 선택:</label>
+                        <select id="selectTool" class="form-control">
+                            <option value="">-- 원하시는 분석 메뉴를 선택하세요 --</option>
+                            <optgroup label="📊 핵심 순위 및 비교 분석">
+                                <option value="top_bottom_n">🏆 상위·하위 국가 순위 비교 (어느 국가가 가장 높고 낮은가?)</option>
+                                <option value="compare_one_vs_all">🎯 특정 국가 vs 전체 평균 비교 (한국은 세계 평균과 어떻게 다른가?)</option>
+                                <option value="trend_line">📈 연도별 시계열 변화 추이 (시간의 흐름에 따른 국가별 추세)</option>
+                                <option value="group_summary">🌍 대륙 및 소득 그룹별 평균 비교 (그룹 간의 격차는 어떠한가?)</option>
+                                <option value="change_rate">🚀 기간별 성장폭·변화량 계산 (어느 국가가 가장 많이 성장했는가?)</option>
+                            </optgroup>
+                            <optgroup label="📈 통계 및 분포 분석">
+                                <option value="distribution">📊 수치 구간별 국가 분포 (보급률 구간별 국가 수 히스토그램)</option>
+                                <option value="correlation_scatter">🔍 두 연도 간 상관관계 산점도 (과거와 현재의 연관성 분석)</option>
+                                <option value="describe_numeric">📐 전체 데이터 기초 통계 요약 (평균, 중앙값, 최소/최대, 표준편차)</option>
+                            </optgroup>
+                            <optgroup label="📋 데이터 품질 및 구조 진단">
+                                <option value="year_coverage">📅 연도별 데이터 수집 충실도 (어느 연도의 데이터가 가장 풍부한가?)</option>
+                                <option value="detect_aggregates">🏷️ 대륙·소득 묶음 집계 행 탐지 (국가가 아닌 합계 행 골라내기)</option>
+                                <option value="quality_report">📋 데이터 결측치·품질 진단 보고서 (데이터 완성도 점검)</option>
+                                <option value="reshape_wide_to_long">🔄 데이터 구조 변환 (가로형 연도 열을 세로형 행으로 변환)</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="groupRefPeriod">
+                        <label for="inputRefPeriod">기준 시점 (연도):</label>
+                        <input type="text" id="inputRefPeriod" class="form-control" placeholder="예: 2024">
+                        <small class="form-hint">7~12번 도구 필수 입력값</small>
+                    </div>
+
+                    <div class="form-group" id="groupTargetItem" style="display: none;">
+                        <label for="inputTargetItem">비교 대상 항목 (국가명):</label>
+                        <input type="text" id="inputTargetItem" class="form-control" placeholder="예: Korea, Rep.">
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="chkExcludeAggregates" checked>
+                            집계 행(World, High income 등) 제외 (권장)
+                        </label>
+                    </div>
+
+                    <button id="btnRunTool" class="btn btn-success">▶ Pandas 분석 계산 실행</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5단계: Pandas 계산 결과 및 차트 -->
+        <section class="card" id="sectionResult" style="display: none;">
+            <div class="card-header">
+                <h2>5. Pandas 계산 결과 및 시각화</h2>
+                <span class="step-num">Step 5</span>
+            </div>
+            <div class="card-body">
+                <div class="pandas-badge">
+                    ⚡ 100% Python Pandas 연산 엔진으로 계산되었습니다 (AI 계산 배제)
+                </div>
+
+                <!-- 메타데이터 통계 박스 -->
+                <div class="calc-meta-grid">
+                    <div>기준 시점: <strong id="resRefPeriod">-</strong></div>
+                    <div>사용한 행: <strong id="resRowsUsed">-</strong>개</div>
+                    <div>제외된 행: <strong id="resRowsExcluded" class="text-danger">-</strong>개 (<span id="resExclusionReason">-</span>)</div>
+                    <div>단위: <strong id="resUnit">-</strong></div>
+                </div>
+
+                <!-- 차트 렌더 영역 -->
+                <div id="chartContainer" class="chart-box" style="display: none;">
+                    <canvas id="insightChart"></canvas>
+                </div>
+
+                <!-- 주의사항 알림 -->
+                <div id="resCautionBox" class="caution-box">
+                    <strong>⚠️ 해석 주의사항:</strong> <span id="resCautionText">-</span>
+                </div>
+
+                <!-- 상세 수치 표 아코디언 -->
+                <details class="calc-details" open>
+                    <summary>📊 계산된 상세 수치 테이블</summary>
+                    <div id="calcTableContainer" class="table-scroll"></div>
+                </details>
+            </div>
+        </section>
+
+        <!-- 6단계: Gemini AI 해석 보고서 (Prompt A/B 모드) -->
+        <section class="card" id="sectionExplain" style="display: none;">
+            <div class="card-header">
+                <h2>6. Gemini AI 결과 해석 보고서 (Prompt A/B 모드)</h2>
+                <span class="step-num">Step 6</span>
+            </div>
+            <div class="card-body">
+                <div class="mode-selector">
+                    <span class="mode-title">해석 모드 선택:</span>
+                    <label class="mode-option">
+                        <input type="radio" name="explainMode" value="B" checked>
+                        <strong>모드 B (정식 모드 - 강력 추천)</strong>
+                        <span class="mode-desc">Pandas가 계산한 정확한 수치만 넘겨 8대 규칙에 따라 정밀하고 사실적인 보고서를 작성합니다.</span>
+                    </label>
+                    <label class="mode-option">
+                        <input type="radio" name="explainMode" value="A">
+                        <strong>모드 A (비교용 모드 - AI 상상력 테스트)</strong>
+                        <span class="mode-desc">계산 수치 없이 데이터 개요만 주고 작성을 요청하여 AI가 숫자를 지어내는 환각(Hallucination)을 확인합니다.</span>
+                    </label>
+                </div>
+
+                <button id="btnGenerateReport" class="btn btn-info">📑 Gemini 해석 보고서 생성</button>
+
+                <!-- 보고서 출력 영역 -->
+                <div id="reportContainer" class="report-box" style="display: none;">
+                    <div class="report-header">
+                        <div class="report-header-left">
+                            <span id="reportModeBadge" class="badge badge-success">모드 B 보고서</span>
+                            <span class="report-tip">※ 중학생도 이해할 수 있도록 쉽게 작성된 분석 리포트입니다.</span>
+                        </div>
+                        <button id="btnDownloadReportMd" class="btn btn-sm btn-outline-primary" title="AI 해석 보고서만 마크다운 파일로 다운로드">
+                            📥 AI 보고서 다운로드 (.md)
+                        </button>
+                    </div>
+                    <div id="reportContent" class="markdown-body"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7단계: 분석 결과 기반 AI 질의응답 (대화창) -->
+        <section class="card" id="sectionChat" style="display: none;">
+            <div class="card-header">
+                <h2>7. 분석 결과 기반 AI 질의응답 (대화창)</h2>
+                <span class="step-num">Step 7</span>
+            </div>
+            <div class="card-body">
+                <p class="hint-text" style="margin-bottom: 12px;">
+                    위에서 계산된 Pandas 수치 결과와 데이터 메타데이터를 바탕으로 궁금한 점을 질문해 보세요.
+                </p>
+
+                <!-- 추천 질문 칩 (원클릭 질문) -->
+                <div class="chat-chips-container">
+                    <span class="chip-label">추천 질문:</span>
+                    <button class="chat-chip" data-question="한국의 순위와 세계 평균과의 격차는 어떻게 돼?">한국 vs 세계 평균 격차는?</button>
+                    <button class="chat-chip" data-question="상위 1~3위 국가의 수치가 100%인 이유는 뭐야?">1~3위가 100%인 이유는?</button>
+                    <button class="chat-chip" data-question="제외된 행들은 어떤 이유로 빠진 거야?">제외된 행들의 이유는?</button>
+                    <button class="chat-chip" data-question="이 지표의 공식 정의와 조사 출처가 어디야?">공식 지표 정의와 출처는?</button>
+                </div>
+
+                <!-- 대화 메시지 목록 -->
+                <div id="chatMessages" class="chat-messages">
+                    <div class="chat-msg ai-msg">
+                        <div class="msg-avatar">🤖</div>
+                        <div class="msg-bubble">
+                            안녕하세요! 방금 확인하신 분석 결과나 통계 지표에 대해 궁금한 점이 있으시면 무엇이든 물어보세요. (예: <em>"왜 1위가 100%야?", "한국의 위치는 어디쯤이야?"</em>)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 질문 입력창 -->
+                <form id="chatForm" class="chat-input-form">
+                    <input type="text" id="chatInput" class="form-control" placeholder="분석 결과에 대해 질문을 입력하세요... (Enter 키로 전송)" autocomplete="off">
+                    <button type="submit" id="btnSendChat" class="btn btn-primary">전송</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- 8단계: 최종 분석 리포트 내보내기 (Markdown 다운로드) -->
+        <section class="card" id="sectionExport" style="display: none;">
+            <div class="card-header">
+                <h2>8. 최종 분석 내용 마크다운(.md) 내보내기</h2>
+                <span class="step-num">Step 8</span>
+            </div>
+            <div class="card-body">
+                <div class="export-banner">
+                    <div class="export-info">
+                        <h3>📥 데이터 진단, Pandas 계산 결과, Gemini 보고서 및 대화 내역 저장</h3>
+                        <p class="hint-text">
+                            현재까지 분석한 데이터 진단 개요, Pandas 수치 통계, Gemini AI 해석 보고서, 그리고 후속 질의응답 내용을 포함한 종합 보고서를 마크다운(.md) 파일로 저장합니다.
+                        </p>
+                    </div>
+                    <div class="export-actions">
+                        <button id="btnDownloadFullMd" class="btn btn-success btn-lg">
+                            💾 최종 분석 종합 보고서 다운로드 (.md)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <p>AI Data Insight Builder | Senior Full Stack Educational Architecture</p>
+        <p class="sub-footer">※ F12 개발자 도구의 [Console] 탭을 열면 실시간 프론트엔드 통신 로그를 확인할 수 있습니다.</p>
+    </footer>
+
+    <!-- 프론트엔드 비즈니스 로직 -->
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
