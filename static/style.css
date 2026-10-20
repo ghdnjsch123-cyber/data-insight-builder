@@ -1301,3 +1301,165 @@ select.form-control optgroup {
         box-shadow: 0 0 22px rgba(239, 68, 68, 0.75);
     }
 }
+
+/* ==========================================================================
+   PWA Entry Modal Prompt ("지금 당장 앱 설치")
+   ========================================================================== */
+.pwa-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(4, 5, 9, 0.82);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 99999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    animation: pwaFadeIn 0.3s ease-out;
+}
+
+.pwa-modal-card {
+    background: linear-gradient(160deg, #181a2c 0%, #0e0f19 60%, #07080d 100%);
+    border: 2px solid var(--gold-primary);
+    border-radius: 16px;
+    max-width: 460px;
+    width: 100%;
+    padding: 34px 28px 30px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95), 0 0 35px var(--gold-glow-intense);
+    position: relative;
+    animation: pwaPopIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pwa-modal-badge {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--gold-bright);
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid var(--border-gold);
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+}
+
+.pwa-modal-crest {
+    margin-bottom: 18px;
+}
+
+.pwa-modal-icon-img {
+    width: 96px;
+    height: 96px;
+    border-radius: 20px;
+    border: 2px solid var(--gold-bright);
+    box-shadow: 0 0 25px var(--gold-glow-intense), 0 8px 16px rgba(0, 0, 0, 0.7);
+    object-fit: cover;
+    animation: iconFloat 4s ease-in-out infinite;
+}
+
+.pwa-modal-title {
+    font-family: var(--font-heading);
+    font-size: 1.65rem;
+    font-weight: 900;
+    color: var(--gold-bright);
+    text-shadow: 0 0 15px var(--gold-glow-intense);
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+}
+
+.pwa-modal-desc {
+    font-size: 0.94rem;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    margin-bottom: 22px;
+    padding: 0 8px;
+}
+
+.pwa-modal-guide {
+    background: rgba(99, 102, 241, 0.12);
+    border: 1px dashed var(--mana-purple);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    color: #e0e7ff;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.pwa-modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.pwa-modal-btn-install {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    font-family: var(--font-heading);
+    color: #07080c !important;
+    background: linear-gradient(135deg, #fbbf24 0%, #d4af37 60%, #b8860b 100%) !important;
+    border: 1px solid var(--gold-bright) !important;
+    border-radius: var(--radius);
+    box-shadow: 0 0 20px var(--gold-glow-intense), 0 4px 12px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.pwa-modal-btn-install:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(251, 191, 36, 0.8), 0 6px 16px rgba(0, 0, 0, 0.7);
+    filter: brightness(1.1);
+}
+
+.pwa-modal-btn-dismiss {
+    width: 100%;
+    padding: 11px 20px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-dark);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pwa-modal-btn-dismiss:hover {
+    background: rgba(255, 255, 255, 0.09);
+    color: var(--text-primary);
+    border-color: var(--border-gold-subtle);
+}
+
+@keyframes pwaFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes pwaPopIn {
+    from {
+        opacity: 0;
+        transform: scale(0.92) translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes iconFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-4px);
+    }
+}

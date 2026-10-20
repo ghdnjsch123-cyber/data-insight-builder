@@ -3,7 +3,7 @@
  * 오프라인 캐싱 및 PWA 백그라운드 서비스 워커
  */
 
-const CACHE_NAME = 'nazarick-cache-v1';
+const CACHE_NAME = 'nazarick-cache-v2';
 const PRECACHE_ASSETS = [
     '/',
     '/static/style.css',

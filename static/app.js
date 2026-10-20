@@ -33,10 +33,17 @@ document.addEventListener("DOMContentLoaded", () => {
     initChatEvents();
 });
 
-// PWA 서비스 워커 등록 및 설치 프롬프트 제어
+// PWA 서비스 워커 등록 및 설치 프롬프트/모달 제어
 function initPwa() {
     const btnInstall = document.getElementById("btnPwaInstall");
     const offlineBanner = document.getElementById("offlineBanner");
+    const pwaPromptModal = document.getElementById("pwaPromptModal");
+    const btnModalInstall = document.getElementById("btnPwaModalInstall");
+    const btnModalDismiss = document.getElementById("btnPwaModalDismiss");
+    const pwaModalGuide = document.getElementById("pwaModalGuide");
+
+    // 앱이 이미 설치되어 독립 창(Standalone) 모드로 실행 중인지 확인
+    const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
 
     // 1. 서비스 워커 등록
     if ("serviceWorker" in navigator) {
@@ -58,27 +65,85 @@ function initPwa() {
         deferredInstallPrompt = e;
         console.log("[PWA] 앱 설치 가능 이벤트 감지 (beforeinstallprompt)");
 
+        // 헤더의 작은 설치 버튼 표시
         if (btnInstall) {
             btnInstall.style.display = "inline-block";
-            btnInstall.addEventListener("click", async () => {
-                if (!deferredInstallPrompt) return;
-                btnInstall.style.display = "none";
-                deferredInstallPrompt.prompt();
-                const choiceResult = await deferredInstallPrompt.userChoice;
-                console.log("[PWA] 사용자 설치 선택:", choiceResult.outcome);
-                deferredInstallPrompt = null;
-            });
         }
     });
 
-    // 3. 앱 설치 완료 감지
+    // 헤더 설치 버튼 핸들러
+    if (btnInstall) {
+        btnInstall.addEventListener("click", async () => {
+            if (deferredInstallPrompt) {
+                deferredInstallPrompt.prompt();
+                const choiceResult = await deferredInstallPrompt.userChoice;
+                console.log("[PWA] 헤더 버튼을 통한 사용자 선택:", choiceResult.outcome);
+                if (choiceResult.outcome === "accepted") {
+                    btnInstall.style.display = "none";
+                    if (pwaPromptModal) pwaPromptModal.style.display = "none";
+                }
+                deferredInstallPrompt = null;
+            } else {
+                // 모달 띄우기
+                if (pwaPromptModal) pwaPromptModal.style.display = "flex";
+            }
+        });
+    }
+
+    // 3. 웹페이지 진입 시 '지금 당장 앱 설치' 모달 팝업 표시
+    if (!isStandalone && pwaPromptModal) {
+        // 사용자가 이번 세션에 '나중에 설치하기'를 누른 적이 없으면 표시
+        const isDismissed = sessionStorage.getItem("pwa_install_dismissed");
+        if (!isDismissed) {
+            // 약간의 딜레이(300ms) 후 자연스럽게 모달 등장
+            setTimeout(() => {
+                pwaPromptModal.style.display = "flex";
+            }, 300);
+        }
+    }
+
+    // 모달 [설치하기] 버튼 클릭 핸들러
+    if (btnModalInstall) {
+        btnModalInstall.addEventListener("click", async () => {
+            if (deferredInstallPrompt) {
+                deferredInstallPrompt.prompt();
+                const choiceResult = await deferredInstallPrompt.userChoice;
+                console.log("[PWA] 모달을 통한 사용자 선택:", choiceResult.outcome);
+                if (choiceResult.outcome === "accepted") {
+                    pwaPromptModal.style.display = "none";
+                    if (btnInstall) btnInstall.style.display = "none";
+                }
+                deferredInstallPrompt = null;
+            } else {
+                // 브라우저가 아직 beforeinstallprompt를 발생시키지 않았거나 iOS 사파리인 경우 가이드 안내
+                if (pwaModalGuide) {
+                    pwaModalGuide.style.display = "block";
+                }
+            }
+        });
+    }
+
+    // 모달 [나중에 설치하기] 버튼 클릭 핸들러
+    if (btnModalDismiss) {
+        btnModalDismiss.addEventListener("click", () => {
+            if (pwaPromptModal) {
+                pwaPromptModal.style.display = "none";
+            }
+            // 세션 동안 다시 뜨지 않도록 저장
+            sessionStorage.setItem("pwa_install_dismissed", "true");
+        });
+    }
+
+    // 4. 앱 설치 완료 감지
     window.addEventListener("appinstalled", () => {
         console.log("[PWA] 나자릭 앱이 시스템에 성공적으로 설치되었습니다!");
         if (btnInstall) btnInstall.style.display = "none";
+        if (pwaPromptModal) pwaPromptModal.style.display = "none";
+        sessionStorage.setItem("pwa_install_dismissed", "true");
         deferredInstallPrompt = null;
     });
 
-    // 4. 온라인/오프라인 상태 모니터링
+    // 5. 온라인/오프라인 상태 모니터링
     function updateOnlineStatus() {
         if (!navigator.onLine) {
             console.warn("[PWA] 오프라인 상태 감지");
